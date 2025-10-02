@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react"
 
 const TickerCard = ({ ticker}) => {
   const [stockData, setStockData] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const fetchStockData = async () => {
@@ -18,11 +19,21 @@ const TickerCard = ({ ticker}) => {
         // console.log(data.chart.result[0])
       } catch (err) {
         console.error("데이터를 가져오는 데 실패했습니다:", err)
+        setError(`${ticker} 데이터를 가져오는 데 실패했습니다.`)
       }
     }
 
     fetchStockData()
   }, [ticker])
+
+    if (error) {
+    return (
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative w-80 mx-auto">
+        <strong className="font-bold">에러!</strong>
+        <div className="block sm:inline ml-2">{error}</div>
+      </div>
+    )
+  }
 
   if (!stockData || !stockData.meta) {
     return (
